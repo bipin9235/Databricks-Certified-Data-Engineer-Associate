@@ -4,12 +4,12 @@
 
 -- COMMAND ----------
 
-USE CATALOG hive_metastore;
+USE CATALOG databricks_learning;
 
-CREATE TABLE IF NOT EXISTS smartphones
+CREATE TABLE IF NOT EXISTS custom.smartphones
 (id INT, name STRING, brand STRING, year INT);
 
-INSERT INTO smartphones
+INSERT INTO custom.smartphones
 VALUES (1, 'iPhone 14', 'Apple', 2022),
       (2, 'iPhone 13', 'Apple', 2021),
       (3, 'iPhone 6', 'Apple', 2014),
@@ -20,6 +20,10 @@ VALUES (1, 'iPhone 14', 'Apple', 2022),
       (8, '12 Pro', 'Xiaomi', 2022),
       (9, 'Redmi 11T Pro', 'Xiaomi', 2022),
       (10, 'Redmi Note 11', 'Xiaomi', 2021)
+
+-- COMMAND ----------
+
+describe extended custom.smartphones;
 
 -- COMMAND ----------
 
@@ -34,7 +38,7 @@ SHOW TABLES
 
 CREATE VIEW view_apple_phones
 AS  SELECT * 
-    FROM smartphones 
+    FROM custom.smartphones 
     WHERE brand = 'Apple';
 
 -- COMMAND ----------
@@ -55,7 +59,7 @@ SHOW TABLES;
 
 CREATE TEMP VIEW temp_view_phones_brands
 AS  SELECT DISTINCT brand
-    FROM smartphones;
+    FROM custom.smartphones;
 
 SELECT * FROM temp_view_phones_brands;
 
@@ -72,7 +76,7 @@ SHOW TABLES;
 -- COMMAND ----------
 
 CREATE GLOBAL TEMP VIEW global_temp_view_latest_phones
-AS SELECT * FROM smartphones
+AS SELECT * FROM custom.smartphones
     WHERE year > 2020
     ORDER BY year DESC;
 

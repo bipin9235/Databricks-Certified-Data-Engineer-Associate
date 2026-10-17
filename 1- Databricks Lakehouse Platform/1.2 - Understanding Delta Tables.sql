@@ -9,12 +9,21 @@
 
 -- COMMAND ----------
 
-USE CATALOG hive_metastore
+create catalog databricks_learning;
 
 -- COMMAND ----------
 
-CREATE TABLE employees
-  (id INT, name STRING, salary DOUBLE);
+USE CATALOG databricks_learning
+
+-- COMMAND ----------
+
+drop table if exists employees;
+
+-- COMMAND ----------
+
+CREATE TABLE if not EXISTS employees
+  (id INT, name STRING, salary DOUBLE)
+  using delta;
 
 -- COMMAND ----------
 
@@ -51,7 +60,7 @@ VALUES
 
 -- COMMAND ----------
 
-SELECT * FROM employees
+SELECT * FROM employees order by id
 
 -- COMMAND ----------
 
@@ -69,7 +78,11 @@ DESCRIBE DETAIL employees
 
 -- COMMAND ----------
 
--- MAGIC %fs ls 'dbfs:/user/hive/warehouse/employees'
+SHOW EXTERNAL LOCATIONS;
+
+-- COMMAND ----------
+
+-- MAGIC %fs ls './'
 
 -- COMMAND ----------
 
@@ -116,5 +129,4 @@ DESCRIBE HISTORY employees
 -- MAGIC %fs head 'dbfs:/user/hive/warehouse/employees/_delta_log/00000000000000000005.json'
 
 -- COMMAND ----------
-
 

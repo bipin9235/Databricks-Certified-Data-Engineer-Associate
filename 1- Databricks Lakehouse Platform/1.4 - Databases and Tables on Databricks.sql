@@ -1,10 +1,10 @@
 -- Databricks notebook source
--- MAGIC %md
--- MAGIC ## Managed Tables
+-- MAGIC %python 
+-- MAGIC dbutils.secrets.listScopes()
 
 -- COMMAND ----------
 
-USE CATALOG hive_metastore;
+USE CATALOG databricks_learning;
 
 CREATE TABLE managed_default
   (width INT, length INT, height INT);
@@ -24,9 +24,27 @@ DESCRIBE EXTENDED managed_default
 
 -- COMMAND ----------
 
+use catalog databricks_learning;
+
+-- COMMAND ----------
+
+CREATE EXTERNAL VOLUME r2vol
+LOCATION 'r2://databricks-external-storage@df0e2e481612baaff5325a0ee8a73a0e.r2.cloudflarestorage.com/root/volume';
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC dbutils.fs.ls("/Volumes/databricks_learning/default/r2vol")
+
+-- COMMAND ----------
+
+SHOW EXTERNAL LOCATIONS;
+
+-- COMMAND ----------
+
 CREATE TABLE external_default
   (width INT, length INT, height INT)
-LOCATION 'dbfs:/mnt/demo/external_default';
+LOCATION 'r2://databricks-external-storage@df0e2e481612baaff5325a0ee8a73a0e.r2.cloudflarestorage.com/root/external_default';
   
 INSERT INTO external_default
 VALUES (3 INT, 2 INT, 1 INT)
@@ -84,7 +102,7 @@ VALUES (3 INT, 2 INT, 1 INT);
 
 CREATE TABLE external_new_default
   (width INT, length INT, height INT)
-LOCATION 'dbfs:/mnt/demo/external_new_default';
+LOCATION 'r2://databricks-external-storage@df0e2e481612baaff5325a0ee8a73a0e.r2.cloudflarestorage.com/root/external_new_default';
   
 INSERT INTO external_new_default
 VALUES (3 INT, 2 INT, 1 INT);
@@ -118,7 +136,7 @@ DROP TABLE external_new_default;
 -- COMMAND ----------
 
 CREATE SCHEMA custom
-LOCATION 'dbfs:/Shared/schemas/custom.db'
+MANAGED LOCATION 'r2://databricks-external-storage@df0e2e481612baaff5325a0ee8a73a0e.r2.cloudflarestorage.com/root/custom'
 
 -- COMMAND ----------
 
@@ -138,7 +156,7 @@ VALUES (3 INT, 2 INT, 1 INT);
 
 CREATE TABLE external_custom
   (width INT, length INT, height INT)
-LOCATION 'dbfs:/mnt/demo/external_custom';
+LOCATION 'r2://databricks-external-storage@df0e2e481612baaff5325a0ee8a73a0e.r2.cloudflarestorage.com/root/custom/external_custom';
   
 INSERT INTO external_custom
 VALUES (3 INT, 2 INT, 1 INT);
